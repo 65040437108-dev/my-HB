@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! 🎂 ความทรงจำแสนพิเศษ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Kanit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #ff6b8b;
+      --primary-glow: rgba(255, 107, 139, 0.45);
+      --gold: #ffd166;
+      --gold-glow: rgba(255, 209, 102, 0.4);
+      --bg-dark: #0a0612;
+      --card-bg: rgba(25, 16, 40, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --text-white: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Prompt', 'Kanit', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Glow that dynamically updates with image */
+    .ambient-bg {
+      position: absolute;
+      inset: -40px;
+      background-size: cover;
+      background-position: center;
+      filter: blur(50px) brightness(0.4) saturate(1.4);
+      transform: scale(1.1);
+      transition: background-image 1s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+    }
+
+    .ambient-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(26, 12, 38, 0.5) 0%, rgba(10, 6, 18, 0.85) 100%),
+                  linear-gradient(to bottom, rgba(10,6,18,0.7) 0%, transparent 25%, transparent 75%, rgba(10,6,18,0.85) 100%);
+      z-index: 1;
+    }
+
+    /* Canvas for floating stars and confetti */
+    #particles-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Main Container Layout */
+    .app-container {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      justify-content: space-between;
+      padding: 20px 24px;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 28px;
+      animation: floatHeart 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatHeart {
+      0% { transform: translateY(0px) rotate(-5deg) scale(1); }
+      100% { transform: translateY(-4px) rotate(5deg) scale(1.1); }
+    }
+
+    .brand-text h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 32px;
+      background: linear-gradient(135deg, #fff 20%, #ffd166 60%, #ff6b8b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+      line-height: 1.1;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Top Controls */
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-pill {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-pill:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    /* Music Player Floating Widget */
+    .music-widget {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(20, 10, 30, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 6px 14px 6px 8px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .music-widget:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    .disc-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #333 30%, #111 70%, var(--gold) 100%);
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: spin 3.5s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .disc-icon.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    .disc-center {
+      width: 8px;
+      height: 8px;
+      background: #ff6b8b;
+      border-radius: 50%;
+    }
+
+    .music-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .music-name {
+      font-size: 11px;
+      font-weight: 500;
+      color: #fff;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .music-status {
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+    }
+
+    /* Slideshow Center Viewport */
+    .stage-wrapper {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      width: 100%;
+      max-width: 1100px;
+      margin: 8px auto;
+      min-height: 420px;
+    }
+
+    /* Slide Frame */
+    .slide-card {
+      position: relative;
+      height: 60vh;
+      min-height: 380px;
+      max-height: 640px;
+      aspect-ratio: 3/4;
+      max-width: 90vw;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8),
+                  0 0 50px rgba(255, 107, 139, 0.35),
+                  inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+      background: #0d0617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.4s ease;
+    }
+
+    @media (orientation: landscape) and (min-width: 900px) {
+      .slide-card {
+        height: 62vh;
+        max-height: 640px;
+        aspect-ratio: 4/5;
+      }
+    }
+
+    .media-backdrop {
+      position: absolute;
+      inset: -20px;
+      width: calc(100% + 40px);
+      height: calc(100% + 40px);
+      object-fit: cover;
+      filter: blur(25px) brightness(0.5);
+      opacity: 0;
+      transition: opacity 0.7s ease-in-out;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .media-backdrop.active {
+      opacity: 0.85;
+    }
+
+    .media-element {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.7s ease-in-out;
+      z-index: 2;
+    }
+
+    .media-element.active {
+      opacity: 1;
+    }
+
+    /* Caption Overlay */
+    .caption-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 30px 24px 20px;
+      background: linear-gradient(to top, rgba(10, 5, 20, 0.95) 0%, rgba(10, 5, 20, 0.6) 60%, transparent 100%);
+      z-index: 10;
+      text-align: center;
+      transition: all 0.4s ease;
+    }
+
+    .caption-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+      background: rgba(255, 209, 102, 0.15);
+      padding: 3px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 209, 102, 0.3);
+    }
+
+    .caption-text {
+      font-size: 17px;
+      font-weight: 500;
+      color: #fff;
+      line-height: 1.4;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    /* Navigation Arrows */
+    .nav-btn {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 15;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 107, 139, 0.85);
+      border-color: #ff6b8b;
+      transform: scale(1.12);
+      box-shadow: 0 0 25px var(--primary-glow);
+    }
+
+    @media (max-width: 600px) {
+      .app-container {
+        padding: 12px 12px;
+      }
+      .brand-text h1 {
+        font-size: 22px;
+      }
+      .brand-text span {
+        display: none;
+      }
+      .btn-pill {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+      .music-name {
+        max-width: 80px;
+      }
+      .nav-btn.prev { left: 4px; }
+      .nav-btn.next { right: 4px; }
+      .slide-card {
+        max-height: 58vh;
+        width: 100%;
+        max-width: 94vw;
+        border-radius: 16px;
+      }
+      .caption-text {
+        font-size: 13.5px;
+      }
+      .caption-overlay {
+        padding: 18px 12px 12px;
+      }
+      .thumbnails-strip {
+        gap: 6px;
+      }
+      .thumb-item {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* Progress bar */
+    .progress-bar-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: 20;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #ffd166, #ff6b8b);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    /* Bottom Control Bar & Thumbnails */
+    .bottom-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .playback-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(25, 15, 35, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      padding: 6px 18px;
+      border-radius: 40px;
+    }
+
+    .ctrl-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.8);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn:hover {
+      color: #fff;
+      transform: scale(1.15);
+    }
+
+    .ctrl-btn.play-toggle {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #ff6b8b, #ff477e);
+      border-radius: 50%;
+      color: #fff;
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    .slide-counter {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: var(--gold);
+    }
+
+    /* Thumbnails Scroller */
+    .thumbnails-strip {
+      display: flex;
+      gap: 8px;
+      padding: 4px 6px;
+      overflow-x: auto;
+      max-width: 100%;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .thumbnails-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .thumb-item {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      cursor: pointer;
+      opacity: 0.5;
+      border: 2px solid transparent;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .thumb-item:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    .thumb-item.active {
+      opacity: 1;
+      border-color: var(--gold);
+      box-shadow: 0 0 12px var(--gold-glow);
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    /* Modal / Popup for Wishes and Gift Opening */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 4, 15, 0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      padding: 20px;
+    }
+
+    .modal-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: linear-gradient(145deg, rgba(35, 18, 50, 0.95), rgba(20, 10, 30, 0.98));
+      border: 1px solid rgba(255, 209, 102, 0.35);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px var(--primary-glow);
+      border-radius: 28px;
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    .modal-backdrop.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-gift-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      display: inline-block;
+      animation: pulseBounce 1.8s infinite;
+    }
+
+    @keyframes pulseBounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.08); }
+    }
+
+    .modal-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 40px;
+      color: var(--gold);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .modal-desc {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.88);
+      line-height: 1.7;
+      margin-bottom: 28px;
+      font-weight: 300;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #ffd166 0%, #ff6b8b 100%);
+      color: #1a0822;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 14px 34px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 25px var(--gold-glow);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 12px 35px var(--primary-glow);
+    }
+
+    /* Floating Heart Animation on Screen */
+    .floating-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99;
+      animation: floatUp 2s ease-out forwards;
+      font-size: 24px;
+    }
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.6) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-80px) scale(1.2) rotate(15deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-160px) scale(1.5) rotate(-20deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Blurred Canvas Backdrop -->
+  <div class="ambient-bg" id="ambientBg"></div>
+  <div class="ambient-overlay"></div>
+
+  <!-- Particle / Star / Sparkles Canvas -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Audio Element -->
+  <audio id="bgMusic" src="Stephanie%20Poetri%20-%20I%20Love%20You%203000%20Lyrics.mp3" loop preload="auto"></audio>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <div class="brand-title">
+        <span class="brand-icon">🎂</span>
+        <div class="brand-text">
+          <h1>Happy Birthday</h1>
+          <span>Memories & Moments</span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <!-- Floating Music Control -->
+        <div class="music-widget" id="musicWidget" title="คลิกเพื่อ เล่น/หยุด เพลง">
+          <div class="disc-icon" id="discIcon">
+            <div class="disc-center"></div>
+          </div>
+          <div class="music-info">
+            <span class="music-name">I Love You 3000</span>
+            <span class="music-status" id="musicStatus">แตะเพื่อเล่นเพลง 🎵</span>
+          </div>
+        </div>
+
+        <!-- Birthday Wishes Modal Button -->
+        <button class="btn-pill" id="openWishesBtn">
+          <span>💌 คำอวยพร</span>
+        </button>
+
+        <!-- Confetti Burst Button -->
+        <button class="btn-pill" id="celebrateBtn">
+          <span>🎉 จุดพลุฉลอง</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slideshow Stage -->
+    <main class="stage-wrapper">
+      <button class="nav-btn prev" id="prevBtn" title="ก่อนหน้า (ลูกศรซ้าย)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="slide-card" id="slideCard">
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Dynamic Media Container -->
+        <div id="mediaContainer" style="width:100%; height:100%; position:relative; overflow:hidden;"></div>
+
+        <!-- Caption -->
+        <div class="caption-overlay">
+          <span class="caption-tag" id="captionTag">Memory 01</span>
+          <p class="caption-text" id="captionText">สุขสันต์วันเกิด ขอให้มีแต่รอยยิ้มและความสุขในทุกๆ วัน ✨</p>
+        </div>
+      </div>
+
+      <button class="nav-btn next" id="nextBtn" title="ถัดไป (ลูกศรขวา)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </main>
+
+    <!-- Bottom Controls & Thumbnails -->
+    <footer class="bottom-bar">
+      <div class="playback-controls">
+        <button class="ctrl-btn" id="rewindBtn" title="ไปภาพแรก">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg>
+        </button>
+
+        <button class="ctrl-btn play-toggle" id="playPauseBtn" title="เล่นอัตโนมัติ / หยุดชั่วคราว">
+          <svg id="playIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <svg id="pauseIcon" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+
+        <span class="slide-counter" id="slideCounter">01 / 16</span>
+
+        <button class="ctrl-btn" id="loveBtn" title="ส่งหัวใจ ❤️">
+          <span style="font-size: 18px;">❤️</span>
+        </button>
+
+        <button class="ctrl-btn" id="fullscreenBtn" title="เต็มจอ (F11)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        </button>
+      </div>
+
+      <!-- Thumbnail Strip -->
+      <div class="thumbnails-strip" id="thumbStrip"></div>
+    </footer>
+  </div>
+
+  <!-- Welcome / Gift Box Intro Modal (Enables Audio Autoplay nicely) -->
+  <div class="modal-backdrop show" id="welcomeModal">
+    <div class="modal-box">
+      <div class="modal-gift-icon">🎁</div>
+      <h2 class="modal-title">Happy Birthday!</h2>
+      <p class="modal-desc">
+        มีของขวัญและความทรงจำแสนพิเศษรออยู่ข้างใน<br>
+        ขอให้ทุกวันเต็มไปด้วยรอยยิ้ม ความอบอุ่น และความสุข ✨
+      </p>
+      <button class="btn-gold" id="startExperienceBtn">
+        <span>🎂 เปิดกล่องของขวัญ & ฟังเพลง</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Birthday Wishes Letter Modal -->
+  <div class="modal-backdrop" id="wishesModal">
+    <div class="modal-box">
+      <div style="font-size: 40px; margin-bottom: 8px;">💌</div>
+      <h2 class="modal-title" style="font-size: 32px;">สุขสันต์วันเกิด</h2>
+      <p class="modal-desc" style="text-align: left; background: rgba(0,0,0,0.25); padding: 18px; border-radius: 16px; border: 1px dashed rgba(255,209,102,0.3); font-size: 14px;">
+        ✨ ขอให้ปีนี้เป็นปีที่ใจดีกับเธอมากๆ<br>
+        🌸 ขอให้ค้นพบความสุขในทุกๆ วัน ไม่ว่าจะเรื่องเล็กหรือเรื่องใหญ่<br>
+        💖 มีรอยยิ้มที่สดใส สุขภาพแข็งแรง และสมหวังในทุกความฝัน<br>
+        🎂 ขอบคุณที่เป็นความสดใสและเรื่องราวดีๆ เสมอนะ!<br><br>
+        <em>— ด้วยรักและความปรารถนาดีเสมอ ✨</em>
+      </p>
+      <button class="btn-gold" id="closeWishesBtn" style="padding: 10px 28px; font-size: 14px;">
+        <span>ปิดหน้าต่าง</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // List of all media files from folder
+    const slides = [
+      { type: 'image', src: '03959983-2DE1-49F9-BBEA-0A18B0052929.jpeg', caption: 'ความสุขเล็กๆ ที่ทำให้ยิ้มได้เสมอ ✨' },
+      { type: 'image', src: '0479F192-FC76-4987-97BF-753FE585FBEA.jpeg', caption: 'ทุกช่วงเวลากับคุณมีความหมายเสมอ 💖' },
+      { type: 'image', src: '35502B54-D286-449B-AB0F-755781AD36BC.jpeg', caption: 'รอยยิ้มที่สดใสที่สุดในโลก 🌸' },
+      { type: 'image', src: '3DABC157-D5F3-40E5-B87B-D531D566F77A.jpeg', caption: 'ขอให้มีความสุขในทุกๆ วันนะ 🎂' },
+      { type: 'image', src: '557613010_1491399892201874_5845588359446759991_n.jpg', caption: 'เติบโตขึ้นอีกปีอย่างงดงามและเข้มแข็ง 🌟' },
+      { type: 'image', src: '6976EA24-B56E-4519-B1D3-0A2D4DE206B7.jpeg', caption: 'ขอให้ปีนี้เป็นปีที่ใจดีกับเธอมากๆ 🌷' },
+      { type: 'image', src: '838964857_2180857109308185_6435713099212552625_n.jpg', caption: 'Special moments worth remembering forever ✨' },
+      { type: 'image', src: '90F14ACF-02EE-46FA-943C-EA13A824611F.jpeg', caption: 'ขอให้สมหวังในทุกสิ่งที่ปรารถนา 💫' },
+      { type: 'image', src: 'A886B9B8-D246-45CF-84D8-772F1BCA73F0.jpeg', caption: 'คนพิเศษในวันพิเศษ 🎁' },
+      { type: 'image', src: 'AB235D03-CE13-47B9-83DF-2BC72C9AA6F2.jpeg', caption: 'Forever young, forever happy 🎈' },
+      { type: 'image', src: 'D1F49F47-DC7A-44C7-B742-3D9D5CF0981F.jpeg', caption: 'ขอให้มีแต่พลังบวกและคนน่ารักรายล้อม 🌻' },
+      { type: 'image', src: 'D984F339-8BC2-48C6-ACF8-AA6AE20B529D.jpeg', caption: 'Happy Birthday! Have a wonderful year ahead 🎉' },
+      { type: 'image', src: 'E6CEFF8D-82BF-4F54-AC80-F73CEBF18B32.jpeg', caption: 'บันทึกความทรงจำแสนพิเศษ 📸' },
+      { type: 'image', src: 'EB8F4AFA-5950-4FD5-B15A-7A8BAEF89757.jpeg', caption: 'ขอบคุณที่เป็นรอยยิ้มให้กันเสมอ 💕' },
+      { type: 'image', src: 'F8486CA0-8184-4B80-AD08-9B45342C4F6E.jpeg', caption: 'May all your wishes and dreams come true ✨' },
+      { type: 'video', src: '56cb3bf6568f13e9ab9fe3af5a73a818.mp4', caption: 'A special memory in motion 🎬' }
+    ];
+
+    let currentIndex = 0;
+    let isPlaying = true;
+    let slideTimer = null;
+    let progressInterval = null;
+    let progressVal = 0;
+    const SLIDE_DURATION = 5000; // 5 seconds per slide
+
+    // DOM Elements
+    const mediaContainer = document.getElementById('mediaContainer');
+    const ambientBg = document.getElementById('ambientBg');
+    const captionTag = document.getElementById('captionTag');
+    const captionText = document.getElementById('captionText');
+    const slideCounter = document.getElementById('slideCounter');
+    const thumbStrip = document.getElementById('thumbStrip');
+    const progressFill = document.getElementById('progressFill');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const bgMusic = document.getElementById('bgMusic');
+    const musicWidget = document.getElementById('musicWidget');
+    const discIcon = document.getElementById('discIcon');
+    const musicStatus = document.getElementById('musicStatus');
+    const celebrateBtn = document.getElementById('celebrateBtn');
+    const openWishesBtn = document.getElementById('openWishesBtn');
+    const closeWishesBtn = document.getElementById('closeWishesBtn');
+    const wishesModal = document.getElementById('wishesModal');
+    const welcomeModal = document.getElementById('welcomeModal');
+    const startExperienceBtn = document.getElementById('startExperienceBtn');
+    const loveBtn = document.getElementById('loveBtn');
+    const rewindBtn = document.getElementById('rewindBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    // Create Slides & Thumbnails
+    slides.forEach((item, index) => {
+      // Backdrop blur image for vibrant photo frame fill
+      if (item.type !== 'video') {
+        const bgEl = document.createElement('img');
+        bgEl.src = item.src;
+        bgEl.className = 'media-backdrop' + (index === 0 ? ' active' : '');
+        bgEl.id = 'bg-' + index;
+        mediaContainer.appendChild(bgEl);
+      }
+
+      // Create main media element
+      let el;
+      if (item.type === 'video') {
+        el = document.createElement('video');
+        el.src = item.src;
+        el.playsInline = true;
+        el.muted = true;
+        el.loop = true;
+        el.autoplay = true;
+      } else {
+        el = document.createElement('img');
+        el.src = item.src;
+        el.alt = 'Birthday Memory';
+      }
+      el.className = 'media-element' + (index === 0 ? ' active' : '');
+      el.id = 'media-' + index;
+      mediaContainer.appendChild(el);
+
+      // Create thumbnail
+      const thumb = document.createElement('img');
+      thumb.src = item.type === 'video' ? '03959983-2DE1-49F9-BBEA-0A18B0052929.jpeg' : item.src;
+      thumb.className = 'thumb-item' + (index === 0 ? ' active' : '');
+      thumb.title = item.caption;
+      thumb.addEventListener('click', () => goToSlide(index));
+      thumbStrip.appendChild(thumb);
+    });
+
+    // Update Display
+    function showSlide(index) {
+      const allMedia = mediaContainer.querySelectorAll('.media-element');
+      const allBackdrops = mediaContainer.querySelectorAll('.media-backdrop');
+      const allThumbs = thumbStrip.querySelectorAll('.thumb-item');
+
+      allBackdrops.forEach((b) => {
+        b.classList.toggle('active', b.id === 'bg-' + index);
+      });
+
+      allMedia.forEach((m, idx) => {
+        if (idx === index) {
+          m.classList.add('active');
+          if (m.tagName === 'VIDEO') {
+            m.currentTime = 0;
+            m.play().catch(() => {});
+          }
+        } else {
+          m.classList.remove('active');
+          if (m.tagName === 'VIDEO') {
+            m.pause();
+          }
+        }
+      });
+
+      allThumbs.forEach((t, idx) => {
+        t.classList.toggle('active', idx === index);
+      });
+
+      // Scroll thumbnail into view
+      if (allThumbs[index]) {
+        allThumbs[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      // Update captions & counts
+      const cur = slides[index];
+      captionTag.textContent = (cur.type === 'video' ? 'Video Moment ' : 'Memory ') + String(index + 1).padStart(2, '0');
+      captionText.textContent = cur.caption;
+      slideCounter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+
+      // Update ambient background
+      if (cur.type === 'image') {
+        ambientBg.style.backgroundImage = `url("${encodeURI(cur.src)}")`;
+      }
+
+      // Reset progress
+      resetProgress();
+    }
+
+    function goToSlide(index) {
+      currentIndex = (index + slides.length) % slides.length;
+      showSlide(currentIndex);
+    }
+
+    function nextSlide() {
+      goToSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      goToSlide(currentIndex - 1);
+    }
+
+    // Progress Bar & Autoplay
+    function resetProgress() {
+      clearInterval(progressInterval);
+      progressVal = 0;
+      progressFill.style.width = '0%';
+
+      if (isPlaying) {
+        const step = 50; // update every 50ms
+        const increment = (step / SLIDE_DURATION) * 100;
+        progressInterval = setInterval(() => {
+          progressVal += increment;
+          progressFill.style.width = Math.min(progressVal, 100) + '%';
+          if (progressVal >= 100) {
+            clearInterval(progressInterval);
+            nextSlide();
+          }
+        }, step);
+      }
+    }
+
+    function togglePlayPause() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        resetProgress();
+      } else {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        clearInterval(progressInterval);
+      }
+    }
+
+    // Audio Playback
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+          discIcon.classList.add('playing');
+          musicStatus.textContent = 'กำลังเล่น 🎶';
+        }).catch(e => {
+          console.log('Audio autoplay prevented:', e);
+        });
+      } else {
+        bgMusic.pause();
+        discIcon.classList.remove('playing');
+        musicStatus.textContent = 'หยุดชั่วคราว ⏸️';
+      }
+    }
+
+    // Floating Hearts Effect
+    function triggerHearts(x, y) {
+      const heartSymbols = ['❤️', '💖', '💕', '✨', '🌸', '🎂'];
+      for (let i = 0; i < 6; i++) {
+        const el = document.createElement('div');
+        el.className = 'floating-heart';
+        el.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+        el.style.left = (x || (window.innerWidth / 2) + (Math.random() * 80 - 40)) + 'px';
+        el.style.top = (y || (window.innerHeight / 2) + (Math.random() * 80 - 40)) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2000);
+      }
+    }
+
+    // Canvas Confetti & Particles System (Offline-Ready)
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+    let confettis = [];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Floating Sparkles Background
+    for (let i = 0; i < 40; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 2 + 0.8,
+        alpha: Math.random() * 0.8 + 0.2,
+        speedY: -(Math.random() * 0.4 + 0.1),
+        speedX: Math.sin(Math.random() * 2) * 0.2
+      });
+    }
+
+    function addConfettiBurst(count = 70) {
+      const colors = ['#ffd166', '#ff6b8b', '#06d6a0', '#118ab2', '#ffffff', '#ff9f1c'];
+      for (let i = 0; i < count; i++) {
+        confettis.push({
+          x: width / 2,
+          y: height * 0.4,
+          w: Math.random() * 9 + 4,
+          h: Math.random() * 6 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 16,
+          vy: -(Math.random() * 12 + 6),
+          rot: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12,
+          gravity: 0.35,
+          opacity: 1
+        });
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Render sparkles
+      particles.forEach(p => {
+        p.y += p.speedY;
+        p.x += p.speedX;
+        if (p.y < 0) {
+          p.y = height;
+          p.x = Math.random() * width;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 235, 180, ${p.alpha})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#ffd166';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // Render Confetti
+      for (let i = confettis.length - 1; i >= 0; i--) {
+        const c = confettis[i];
+        c.vy += c.gravity;
+        c.x += c.vx;
+        c.y += c.vy;
+        c.rot += c.rotSpeed;
+        c.opacity -= 0.008;
+
+        if (c.y > height || c.opacity <= 0) {
+          confettis.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.translate(c.x, c.y);
+        ctx.rotate((c.rot * Math.PI) / 180);
+        ctx.globalAlpha = Math.max(0, c.opacity);
+        ctx.fillStyle = c.color;
+        ctx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h);
+        ctx.restore();
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Event Listeners
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    playPauseBtn.addEventListener('click', togglePlayPause);
+    musicWidget.addEventListener('click', toggleMusic);
+    celebrateBtn.addEventListener('click', () => {
+      addConfettiBurst(80);
+      triggerHearts();
+    });
+    loveBtn.addEventListener('click', (e) => {
+      const rect = loveBtn.getBoundingClientRect();
+      triggerHearts(rect.left + rect.width / 2, rect.top);
+    });
+    rewindBtn.addEventListener('click', () => goToSlide(0));
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    openWishesBtn.addEventListener('click', () => wishesModal.classList.add('show'));
+    closeWishesBtn.addEventListener('click', () => wishesModal.classList.remove('show'));
+    wishesModal.addEventListener('click', (e) => {
+      if (e.target === wishesModal) wishesModal.classList.remove('show');
+    });
+
+    // Start Experience & Music
+    startExperienceBtn.addEventListener('click', () => {
+      welcomeModal.classList.remove('show');
+      addConfettiBurst(100);
+      triggerHearts();
+      // Start audio smoothly
+      bgMusic.volume = 0.85;
+      bgMusic.play().then(() => {
+        discIcon.classList.add('playing');
+        musicStatus.textContent = 'กำลังเล่น 🎶';
+      }).catch(err => {
+        console.log('Audio autoplay:', err);
+      });
+      // Start slideshow
+      isPlaying = true;
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+      resetProgress();
+    });
+
+    // Touch Swipe Gesture for Mobile
+    let touchStartX = 0;
+    document.getElementById('slideCard').addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.getElementById('slideCard').addEventListener('touchend', e => {
+      let touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 45) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > 45) {
+        prevSlide();
+      }
+    }, { passive: true });
+
+    // Keyboard controls
+    window.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+      else if (e.key === ' ') {
+        e.preventDefault();
+        togglePlayPause();
+      }
+    });
+
+    // Initialize first slide
+    showSlide(0);
+  </script>
+</body>
+</html>
